@@ -1,12 +1,15 @@
-import React, {useState} from 'react';
-import {v4 as uuidv4} from 'uuid'
+import React, {useEffect, useState} from 'react';
+import {v4 as uuidv4} from 'uuid';
+import { BrowserRouter as Router,Route } from 'react-router-dom';
 
+import Header from "./componentes/Header"
 import Tasks from "./componentes/Tasks";
 import AddTask from "./componentes/AddTask";
 import "./App.css";
-import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from 'react-dom/cjs/react-dom.development';
+import TaskDetails from "./componentes/TaskDetails";
 
-const APP = () => {
+
+const App = () => {
   //let message = "hello word";
   const [tasks, setTasks ] = useState([
     {
@@ -20,6 +23,7 @@ const APP = () => {
       completed: true,
     }
   ]);
+
   const handleTaskClick = (taskId) => {
     const newTasks = tasks.map(task => {
       if (task.id == taskId) return {...task, completed: !task.completed}
@@ -36,15 +40,35 @@ const handleTaskAddition = (taskTitle) => {
 ];
 setTasks(newTasks);
 }
+
+const handleTaskDeletion = (taskId) => {
+  const newTasks = tasks.filter (task => task.id !== taskId)
+
+  setTasks(newTasks)
+
+}
   
   return(
-    <>
+    <Router>
     <div className="contanier">
-      <AddTask handleTaskAddition={handleTaskAddition}/>
-      <Tasks tasks={tasks}/>
+   <Header/>
+   <Route path="/" 
+   exact
+    render={() => (
+     <>
+      <AddTask handleTaskAddition={handleTaskAddition} />
+      <Tasks tasks={tasks} 
+      handleTaskClick={handleTaskClick} 
+      handleTaskDeletion={handleTaskDeletion}
+       />
+     </>
+
+   )}
+   />
+   <Route path ="/:taskTitle" exact component ={TaskDetails} />
     </div>
-      </>
+      </Router>
   );
 };
  
-export default APP;
+export default App;

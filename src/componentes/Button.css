@@ -9,4 +9,9 @@
   font-weight: bold;
   cursor: pointer;
   border: none;
+  transition: all 0.05s;
+}
+.button:hover {
+  background-color: black;
+  color: rgb(132, 0, 255);
 }
